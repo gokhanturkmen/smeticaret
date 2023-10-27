@@ -45,6 +45,12 @@
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
                                     </div>
+                                    @if (!string.IsNullOrWhiteSpace(ViewBag.ErrorMessage))
+                                    {
+                                        <div class="alert alert-danger" role="alert">
+                                            @ViewBag.ErrorMessage
+                                        </div>
+                                    }
                                     <form class="user" asp-action="Login" asp-controller="Auth" method="post">
                                         <div class="form-group">
                                             <input asp-for="Email" class="form-control form-control-user"

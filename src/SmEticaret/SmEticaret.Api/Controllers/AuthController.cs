@@ -54,7 +54,7 @@ namespace SmEticaret.Api.Controllers
                 return StatusCode(tokenResult.StatusCode, tokenResult.Message);
             }
 
-            return Ok(new
+            return Ok(new TokenDto
             {
                 Token = tokenResult.Data
             });

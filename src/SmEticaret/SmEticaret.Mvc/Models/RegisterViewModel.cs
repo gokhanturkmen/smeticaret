@@ -19,7 +19,7 @@ namespace SmEticaret.Mvc.Models
         [Required, MinLength(1), DataType(DataType.Password)]
         public string Password { get; set; }
 
-        [Required, MinLength(1), Compare(nameof(Password))]
+        [Required, MinLength(1), Compare(nameof(Password)), DataType(DataType.Password)]
         public string PasswordRepeat { get; set; }
     }
 }
