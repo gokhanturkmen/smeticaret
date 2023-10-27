@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace SmEticaret.Data.Entities
 {
@@ -7,7 +8,19 @@ namespace SmEticaret.Data.Entities
         public int UserId { get; set; }
 
         // Navigation Properties
-        [ForeignKey(nameof(UserId))]
+
         public UserEntity User { get; set; }
+        public ICollection<CartItemEntity> CartItems { get; set; }
+    }
+
+    public class CartEntityConfiguration : IEntityTypeConfiguration<CartEntity>
+    {
+        public void Configure(EntityTypeBuilder<CartEntity> builder)
+        {
+            builder.HasOne(c => c.User)
+                .WithMany(u => u.Carts)
+                .HasForeignKey(c => c.UserId)
+                .OnDelete(DeleteBehavior.ClientCascade);
+        }
     }
 }

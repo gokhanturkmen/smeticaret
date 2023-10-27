@@ -1,5 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.ComponentModel.DataAnnotations;
 
 namespace SmEticaret.Data.Entities
 {
@@ -15,10 +16,24 @@ namespace SmEticaret.Data.Entities
         public decimal Paid { get; set; }
 
         // Navigation Properties
-        [ForeignKey(nameof(OrderId))]
         public OrderEntity Order { get; set; }
 
-        [ForeignKey(nameof(ProductId))]
         public ProductEntity Product { get; set; }
+    }
+
+    public class OrderItemEntityConfiguration : IEntityTypeConfiguration<OrderItemEntity>
+    {
+        public void Configure(EntityTypeBuilder<OrderItemEntity> builder)
+        {
+            builder.HasOne(c => c.Order)
+                .WithMany(x => x.OrderItems)
+                .HasForeignKey(c => c.OrderId)
+                .OnDelete(DeleteBehavior.ClientCascade);
+
+            builder.HasOne(c => c.Product)
+                .WithMany(x => x.OrderItems)
+                .HasForeignKey(c => c.OrderId)
+                .OnDelete(DeleteBehavior.ClientCascade);
+        }
     }
 }

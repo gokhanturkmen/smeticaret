@@ -6,5 +6,6 @@ namespace SmEticaret.Data.Entities
     {
         [Required, MaxLength(10)]
         public string Name { get; set; }
+        public ICollection<UserEntity> Users { get; set; }
     }
 }

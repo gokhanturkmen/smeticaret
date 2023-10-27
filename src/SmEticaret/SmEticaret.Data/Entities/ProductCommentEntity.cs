@@ -1,5 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.ComponentModel.DataAnnotations;
 
 namespace SmEticaret.Data.Entities
 {
@@ -16,10 +17,24 @@ namespace SmEticaret.Data.Entities
         public DateTime CreatedAt { get; set; }
 
         // Navigation Properties
-        [ForeignKey(nameof(ProductId))]
         public ProductEntity Product { get; set; }
 
-        [ForeignKey(nameof(UserId))]
         public UserEntity User { get; set; }
+    }
+
+    public class ProductCommentEntityConfiguration : IEntityTypeConfiguration<ProductCommentEntity>
+    {
+        public void Configure(EntityTypeBuilder<ProductCommentEntity> builder)
+        {
+            builder.HasOne(pc => pc.Product)
+                .WithMany(p => p.ProductComments)
+                .HasForeignKey(pc => pc.ProductId)
+                .OnDelete(DeleteBehavior.ClientCascade);
+
+            builder.HasOne(pc => pc.User)
+                .WithMany(u => u.ProductComments)
+                .HasForeignKey(pc => pc.UserId)
+                .OnDelete(DeleteBehavior.ClientCascade);
+        }
     }
 }

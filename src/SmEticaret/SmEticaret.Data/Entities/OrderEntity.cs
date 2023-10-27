@@ -1,5 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.ComponentModel.DataAnnotations;
 
 namespace SmEticaret.Data.Entities
 {
@@ -12,7 +13,18 @@ namespace SmEticaret.Data.Entities
         public string DeliveryAddress { get; set; }
 
         // Navigation Properties
-        [ForeignKey(nameof(UserId))]
         public UserEntity User { get; set; }
+        public ICollection<OrderItemEntity> OrderItems { get; set; }
+    }
+
+    public class OrderEntityConfiguration : IEntityTypeConfiguration<OrderEntity>
+    {
+        public void Configure(EntityTypeBuilder<OrderEntity> builder)
+        {
+            builder.HasOne(o => o.User)
+                .WithMany(u => u.Orders)
+                .HasForeignKey(o => o.UserId)
+                .OnDelete(DeleteBehavior.ClientCascade);
+        }
     }
 }
